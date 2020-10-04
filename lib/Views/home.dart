@@ -49,11 +49,6 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: BrandName(),
-        elevation: 0.0,
-      ),
       body: SingleChildScrollView(
         child: Container(
           child: Column(
