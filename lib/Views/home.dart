@@ -112,23 +112,23 @@ class _HomeState extends State<Home> {
               SizedBox(
                 height: 16,
               ),
-              Container(
-                height: 80,
-                child: ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
-                  itemCount: categories.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, int index) {
-                    // wallpapers[index].src.portrait;
-                    return CategoriesTile(
-                      title: categories[index].categorieName,
-                      imgUrl: categories[index].imgUrl,
-                    );
-                  },
-
-                ),
-              ),
+              // Container(
+              //   height: 80,
+              //   child: ListView.builder(
+              //     padding: EdgeInsets.symmetric(horizontal: 24),
+              //     itemCount: categories.length,
+              //     shrinkWrap: true,
+              //     scrollDirection: Axis.horizontal,
+              //     itemBuilder: (BuildContext context, int index) {
+              //       // wallpapers[index].src.portrait;
+              //       return CategoriesTile(
+              //         title: categories[index].categorieName,
+              //         imgUrl: categories[index].imgUrl,
+              //       );
+              //     },
+              //
+              //   ),
+              // ),
               WallpaperList(wallpapers, context)
             ],
           ),
