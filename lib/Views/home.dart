@@ -6,6 +6,7 @@ import 'package:wallhub/Model/About%20Us.dart';
 import 'package:wallhub/Model/Category_model.dart';
 import 'package:wallhub/Model/Wallpaper_model.dart';
 import 'package:wallhub/dataa/data.dart';
+import 'package:wallhub/view/image_view.dart';
 import 'package:wallhub/widget/widget.dart';
 class Home extends StatefulWidget {
   @override
@@ -151,9 +152,19 @@ CategoriesTile({@required this.imgUrl,@required this.title});
       margin: EdgeInsets.only(right: 4),
       child: Stack(
         children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-              child: Image.network(imgUrl,height: 60,width: 100,fit: BoxFit.cover,)),
+          GestureDetector(
+           onTap: (){
+             Navigator.push(context, MaterialPageRoute(
+                 builder: (context) => ImageView()
+             ));
+           },
+            child: Hero(
+              tag: imgUrl,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                  child: Image.network(imgUrl,height: 60,width: 100,fit: BoxFit.cover,)),
+            ),
+          ),
           Container(
             decoration: BoxDecoration(
               color: Colors.black26,

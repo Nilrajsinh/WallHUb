@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wallhub/Model/About%20Us.dart';
 import 'package:wallhub/Model/Category_model.dart';
+import 'package:wallhub/Views/CATELIST.dart';
 import 'package:wallhub/dataa/data.dart';
 import 'package:wallhub/widget/widget.dart';
 
@@ -24,7 +25,7 @@ class _CategoryState extends State<Category> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(16),
           child: Container(
             child: GridView.count(
               shrinkWrap: true,
@@ -82,24 +83,34 @@ class CategoriesTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(right: 4),
-      child: Stack(
-        children: <Widget>[
-          ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.network(imgUrl,height: 300,width: 150,fit: BoxFit.cover,)),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.black26,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            alignment: Alignment.center,
-            height: 300,width: 150,
-            child: Text(title,style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500,fontSize: 16,letterSpacing: 1.0),),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CategorieScreen(
+                  categorie: title,
+                )));
+      },
+      child: Container(
+        margin: EdgeInsets.only(right: 4),
+        child: Stack(
+          children: <Widget>[
+            ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.network(imgUrl,height: 300,width: 200,fit: BoxFit.cover,)),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              alignment: Alignment.center,
+              height: 300,width: 200,
+              child: Text(title,style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500,fontSize: 16,letterSpacing: 1.0),),
 
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
