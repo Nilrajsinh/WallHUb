@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:wallhub/Model/About%20Us.dart';
 import 'package:wallhub/Model/Category_model.dart';
 import 'package:wallhub/Model/Wallpaper_model.dart';
 import 'package:wallhub/dataa/data.dart';
@@ -76,6 +77,41 @@ class _HomeState extends State<Home> {
                 ],),
               ),
               SizedBox(height: 16,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "Made By ",
+                    style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 12,
+                        letterSpacing: 1.5,
+                        fontFamily: 'Lobster'),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AboutUs(
+
+                              )));
+                    },
+                    child: Container(
+                        child: Text(
+                          "Ebrious",
+                          style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 12,
+                              letterSpacing: 1.5,
+                              fontFamily: 'Lobster'),
+                        )),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 16,
+              ),
               Container(
                 height: 80,
                 child: ListView.builder(
