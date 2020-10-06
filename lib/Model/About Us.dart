@@ -16,6 +16,10 @@ class _AboutUsState extends State<AboutUs> {
 
         backgroundColor: Colors.white,
         appBar: AppBar(
+          leading: IconButton(icon:Icon(Icons.arrow_back),
+            onPressed:() => Navigator.pop(context),
+           // onPressed:() => (context),
+          ),
           iconTheme: IconThemeData(
             color: Colors.black, //change your color here
           ),
@@ -46,18 +50,29 @@ class _AboutUsState extends State<AboutUs> {
                   'masterpiece ',
               style: TextStyle(
                 // color: Color(0xffFC766AFF),
-                letterSpacing: 1.5,
-                fontFamily: 'Lobster',
-                fontSize: 18
-              ),),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(90.0),
-              child: Image.asset("asset/Original on Transparent copy.png",
+                letterSpacing: 0.5,
+               // fontFamily: 'Lobster',
+                fontSize: 18,
+                fontWeight: FontWeight.bold
+
+              ),
+                textAlign: TextAlign.justify,
               ),
             ),
+           Spacer(),
+           Column(
+
+             children: [
+               Padding(
+                 padding: const EdgeInsets.only(bottom:25.0),
+                 child: Image.asset("asset/Original on Transparent copy.png",
+                 height:120,),
+               ),
+             ],
+           ) //
           ],
-        )
+        ),
+
       ),
     );
   }
