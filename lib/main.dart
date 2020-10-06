@@ -1,10 +1,19 @@
+import 'dart:io';
+
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:wallhub/Views/Categories.dart';
 import 'package:wallhub/Views/home.dart';
 import 'package:wallhub/widget/widget.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  // Initialize without device test ids.
+  Admob.initialize();
+  if (Platform.isIOS){
+    await Admob.requestTrackingAuthorization();
+  }
   runApp(MyApp());
 }
 

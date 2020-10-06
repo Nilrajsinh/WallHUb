@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -9,12 +10,15 @@ import 'package:wallhub/Views/CATELIST.dart';
 import 'package:wallhub/dataa/data.dart';
 import 'package:wallhub/view/image_view.dart';
 import 'package:wallhub/widget/widget.dart';
+import 'package:admob_flutter/admob_flutter.dart';
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+  AdmobBannerSize bannerSize;
 
   List<CategoriesModel> categories = new List();
   List<PhotosModel> wallpapers = new List();
@@ -122,6 +126,8 @@ class _HomeState extends State<Home> {
   void initState() {
     categories = getCategories();
 
+    bannerSize = AdmobBannerSize.BANNER;
+
     getTrendingWallpapers();
     getnewWallpapers();
     get4kgWallpapers();
@@ -131,6 +137,9 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
+  void handleEvent(AdmobAdEvent event, Map<String, dynamic> args, String adType){
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -216,6 +225,52 @@ class _HomeState extends State<Home> {
 
                WallpaperList(wallpapers, context),
 
+              // //TODO: Banner add start here
+              // Container(
+              // //  height: 150,
+              //     child: PopupMenuButton(
+              //     initialValue: bannerSize,
+              //     child: Center(
+              //       child: Text(
+              //         'Banner size',
+              //         style: TextStyle(
+              //             fontWeight: FontWeight.w500,
+              //             color: Colors.white),
+              //       ),
+              //     ),
+              //     offset: Offset(0, 20),
+              //     onSelected: (AdmobBannerSize newSize) {
+              //       setState(() {
+              //         bannerSize = newSize;
+              //       });
+              //     },
+              //     itemBuilder:
+              //     (BuildContext context) => <PopupMenuEntry<AdmobBannerSize>>[
+              //       PopupMenuItem(
+              //         value: AdmobBannerSize.LARGE_BANNER,
+              //         child: Text('LARGE_BANNER'),
+              //       ),
+              //     ]
+              // )),
+              // Container(
+              //   child: AdmobBanner(
+              //     adUnitId: getBannerAdUnitId(),
+              //     adSize: bannerSize,
+              //     listener: (AdmobAdEvent event,
+              //         Map<String, dynamic> args) {
+              //       handleEvent(event, args, 'LARGE_BANNER');
+              //     },
+              //     onBannerCreated:
+              //         (AdmobBannerController controller) {
+              //       // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
+              //       // Normally you don't need to worry about disposing this yourself, it's handled.
+              //       // If you need direct access to dispose, this is your guy!
+              //       // controller.dispose();
+              //     },
+              //   ),
+              // ),
+              // //TODO: Banner add End here
+
               SizedBox(
                 height: 16,
               ),
@@ -245,6 +300,7 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
+              //WallpaperList(kwallpapers, context),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -262,6 +318,51 @@ class _HomeState extends State<Home> {
               SizedBox(
                 height: 16,
               ),
+              //TODO: Banner add start here
+              Container(
+                //  height: 150,
+                  child: PopupMenuButton(
+                      initialValue: bannerSize,
+                      child: Center(
+                        child: Text(
+                          'Banner size',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white),
+                        ),
+                      ),
+                      offset: Offset(0, 20),
+                      onSelected: (AdmobBannerSize newSize) {
+                        setState(() {
+                          bannerSize = newSize;
+                        });
+                      },
+                      itemBuilder:
+                          (BuildContext context) => <PopupMenuEntry<AdmobBannerSize>>[
+                        PopupMenuItem(
+                          value: AdmobBannerSize.LARGE_BANNER,
+                          child: Text('LARGE_BANNER'),
+                        ),
+                      ]
+                  )),
+              Container(
+                child: AdmobBanner(
+                  adUnitId: getBannerAdUnitId(),
+                  adSize: bannerSize,
+                  listener: (AdmobAdEvent event,
+                      Map<String, dynamic> args) {
+                    handleEvent(event, args, 'LARGE_BANNER');
+                  },
+                  onBannerCreated:
+                      (AdmobBannerController controller) {
+                    // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
+                    // Normally you don't need to worry about disposing this yourself, it's handled.
+                    // If you need direct access to dispose, this is your guy!
+                    // controller.dispose();
+                  },
+                ),
+              ),
+              //TODO: Banner add End here
               WallpaperList(newwallpapers, context),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -304,6 +405,51 @@ class _HomeState extends State<Home> {
               SizedBox(
                 height: 16,
               ),
+              //TODO: Banner add start here
+              Container(
+                //  height: 150,
+                  child: PopupMenuButton(
+                      initialValue: bannerSize,
+                      child: Center(
+                        child: Text(
+                          'Banner size',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white),
+                        ),
+                      ),
+                      offset: Offset(0, 20),
+                      onSelected: (AdmobBannerSize newSize) {
+                        setState(() {
+                          bannerSize = newSize;
+                        });
+                      },
+                      itemBuilder:
+                          (BuildContext context) => <PopupMenuEntry<AdmobBannerSize>>[
+                            PopupMenuItem(
+                              value: AdmobBannerSize.MEDIUM_RECTANGLE,
+                              child: Text('MEDIUM_RECTANGLE'),
+                            ),
+                      ]
+                  )),
+              Container(
+                child: AdmobBanner(
+                  adUnitId: getBannerAdUnitId(),
+                  adSize: bannerSize,
+                  listener: (AdmobAdEvent event,
+                      Map<String, dynamic> args) {
+                    handleEvent(event, args, 'MEDIUM_RECTANGLE');
+                  },
+                  onBannerCreated:
+                      (AdmobBannerController controller) {
+                    // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
+                    // Normally you don't need to worry about disposing this yourself, it's handled.
+                    // If you need direct access to dispose, this is your guy!
+                    // controller.dispose();
+                  },
+                ),
+              ),
+              //TODO: Banner add End here
               WallpaperList(kwallpapers, context),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -346,6 +492,51 @@ class _HomeState extends State<Home> {
               SizedBox(
                 height: 16,
               ),
+              //TODO: Banner add start here
+              Container(
+                //  height: 150,
+                  child: PopupMenuButton(
+                      initialValue: bannerSize,
+                      child: Center(
+                        child: Text(
+                          'Banner size',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white),
+                        ),
+                      ),
+                      offset: Offset(0, 20),
+                      onSelected: (AdmobBannerSize newSize) {
+                        setState(() {
+                          bannerSize = newSize;
+                        });
+                      },
+                      itemBuilder:
+                          (BuildContext context) => <PopupMenuEntry<AdmobBannerSize>>[
+                        PopupMenuItem(
+                          value: AdmobBannerSize.LARGE_BANNER,
+                          child: Text('LARGE_BANNER'),
+                        ),
+                      ]
+                  )),
+              Container(
+                child: AdmobBanner(
+                  adUnitId: getBannerAdUnitId(),
+                  adSize: bannerSize,
+                  listener: (AdmobAdEvent event,
+                      Map<String, dynamic> args) {
+                    handleEvent(event, args, 'LARGE_BANNER');
+                  },
+                  onBannerCreated:
+                      (AdmobBannerController controller) {
+                    // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
+                    // Normally you don't need to worry about disposing this yourself, it's handled.
+                    // If you need direct access to dispose, this is your guy!
+                    // controller.dispose();
+                  },
+                ),
+              ),
+              //TODO: Banner add End here
               WallpaperList(popularwallpapers, context),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -388,6 +579,51 @@ class _HomeState extends State<Home> {
               SizedBox(
                 height: 16,
               ),
+              //TODO: Banner add start here
+              Container(
+                //  height: 150,
+                  child: PopupMenuButton(
+                      initialValue: bannerSize,
+                      child: Center(
+                        child: Text(
+                          'Banner size',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white),
+                        ),
+                      ),
+                      offset: Offset(0, 20),
+                      onSelected: (AdmobBannerSize newSize) {
+                        setState(() {
+                          bannerSize = newSize;
+                        });
+                      },
+                      itemBuilder:
+                          (BuildContext context) => <PopupMenuEntry<AdmobBannerSize>>[
+                        PopupMenuItem(
+                          value: AdmobBannerSize.LARGE_BANNER,
+                          child: Text('LARGE_BANNER'),
+                        ),
+                      ]
+                  )),
+              Container(
+                child: AdmobBanner(
+                  adUnitId: getBannerAdUnitId(),
+                  adSize: bannerSize,
+                  listener: (AdmobAdEvent event,
+                      Map<String, dynamic> args) {
+                    handleEvent(event, args, 'LARGE_BANNER');
+                  },
+                  onBannerCreated:
+                      (AdmobBannerController controller) {
+                    // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
+                    // Normally you don't need to worry about disposing this yourself, it's handled.
+                    // If you need direct access to dispose, this is your guy!
+                    // controller.dispose();
+                  },
+                ),
+              ),
+              //TODO: Banner add End here
               WallpaperList(letestwallpapers, context),
               SizedBox(
                 height: 16,
@@ -469,3 +705,11 @@ CategoriesTile({@required this.imgUrl,@required this.title});
   }
 }
 
+String getBannerAdUnitId() {
+  if (Platform.isIOS) {
+    return 'ca-app-pub-7270315510450456/1230276913';
+  } else if (Platform.isAndroid) {
+    return 'ca-app-pub-3940256099942544/6300978111';
+  }
+  return null;
+}

@@ -5,6 +5,8 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:admob_flutter/admob_flutter.dart';
+
 
 class ImageView extends StatefulWidget {
   final String imgUrl;
@@ -15,8 +17,31 @@ class ImageView extends StatefulWidget {
 }
 
 class _ImageViewState extends State<ImageView> {
+  AdmobInterstitial interstitialAd;
 
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+
+
+
+    interstitialAd = AdmobInterstitial(
+      adUnitId: getInterstitialAdUnitId(),
+      listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+        if (event == AdmobAdEvent.closed) interstitialAd.load();
+        handleEvent(event, args, 'Interstitial');
+      },
+    );
+    interstitialAd.load();
+
+  }
+
+  void handleEvent( AdmobAdEvent event, Map<String, dynamic> args, String adType){
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,9 +63,11 @@ class _ImageViewState extends State<ImageView> {
 
               children: <Widget>[
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     _save();
-
+                    if (interstitialAd.isLoaded != null) {
+                      interstitialAd.show();
+                    }
                     Navigator.pop(context);
                   },
                   child: Stack(
@@ -122,4 +149,14 @@ class _ImageViewState extends State<ImageView> {
   }
 
 }
+
+String getInterstitialAdUnitId() {
+  if (Platform.isIOS) {
+    return 'ca-app-pub-7270315510450456/9519830472';
+  } else if (Platform.isAndroid) {
+    return 'ca-app-pub-3940256099942544/1033173712';
+  }
+  return null;
+}
+
 
