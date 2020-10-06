@@ -26,9 +26,38 @@ class _AboutUsState extends State<AboutUs> {
 
           ],
         ),
-        body: Text('About Us', style: TextStyle(
-          fontWeight: FontWeight.bold,
-        ),),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right:8.0,top: 8),
+              child: Text('About Us', style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                letterSpacing: 2,
+                fontFamily: 'Lobster',
+              ),),
+            ),
+            SizedBox(height: 16,),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Text('Thousands of wallpaper on you single tap,Our goal is to'
+                  ' serve amazing Wallpapers to the people all across the world. Bring your screen to '
+                  'life with exclusive Wallpapers delivered to you by Ebrious. Each wallpaper is a real '
+                  'masterpiece ',
+              style: TextStyle(
+                // color: Color(0xffFC766AFF),
+                letterSpacing: 1.5,
+                fontFamily: 'Lobster',
+                fontSize: 18
+              ),),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(90.0),
+              child: Image.asset("asset/Original on Transparent copy.png",
+              ),
+            ),
+          ],
+        )
       ),
     );
   }
