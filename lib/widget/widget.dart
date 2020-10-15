@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:wallhub/Model/Wallpaper_model.dart';
 import 'package:wallhub/view/image_view.dart';
 
+
 Widget BrandName(){
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -53,6 +54,8 @@ Widget WallpaperList(List<PhotosModel> wallpapers, context){
                    child: Image.network(e.src.portrait,fit: BoxFit.cover,)),
 
              ),
+
+
 
             ),
           ),

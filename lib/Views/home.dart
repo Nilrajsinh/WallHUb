@@ -7,10 +7,14 @@ import 'package:wallhub/Model/About%20Us.dart';
 import 'package:wallhub/Model/Category_model.dart';
 import 'package:wallhub/Model/Wallpaper_model.dart';
 import 'package:wallhub/Views/CATELIST.dart';
+import 'package:wallhub/Views/Search.dart';
 import 'package:wallhub/dataa/data.dart';
 import 'package:wallhub/view/image_view.dart';
 import 'package:wallhub/widget/widget.dart';
-import 'package:admob_flutter/admob_flutter.dart';
+import 'package:facebook_audience_network/facebook_audience_network.dart';
+
+
+const String testDevice = '';
 
 class Home extends StatefulWidget {
   @override
@@ -18,7 +22,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  AdmobBannerSize bannerSize;
+
 
   List<CategoriesModel> categories = new List();
   List<PhotosModel> wallpapers = new List();
@@ -121,12 +125,14 @@ class _HomeState extends State<Home> {
     });
   }
 
+  TextEditingController searchController = new TextEditingController();
 
   @override
   void initState() {
     categories = getCategories();
 
-    bannerSize = AdmobBannerSize.BANNER;
+
+
 
     getTrendingWallpapers();
     getnewWallpapers();
@@ -137,7 +143,10 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
-  void handleEvent(AdmobAdEvent event, Map<String, dynamic> args, String adType){
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
 
   }
 
@@ -159,7 +168,7 @@ class _HomeState extends State<Home> {
                 child: Row(children: <Widget>[
                   Expanded(
                     child: TextField(
-
+                      controller: searchController,
                       decoration: InputDecoration(
                         hintText: 'Search here',
                         border: InputBorder.none
@@ -168,7 +177,20 @@ class _HomeState extends State<Home> {
                   ),
                   //TODO: Search start from 1 hour 36 min , Left here
 
-                  Icon(Icons.search),
+                  GestureDetector(
+                    onTap: (){
+                    if (searchController.text != "") {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SearchView(
+                                      search: searchController.text,
+                                    )));
+                          }
+
+
+                    },
+                      child: Icon(Icons.search)),
                 ],),
               ),
               SizedBox(height: 16,),
@@ -223,52 +245,34 @@ class _HomeState extends State<Home> {
               ),
               SizedBox(height: 8,),
 
+
                WallpaperList(wallpapers, context),
 
               // //TODO: Banner add start here
-              // Container(
-              // //  height: 150,
-              //     child: PopupMenuButton(
-              //     initialValue: bannerSize,
-              //     child: Center(
-              //       child: Text(
-              //         'Banner size',
-              //         style: TextStyle(
-              //             fontWeight: FontWeight.w500,
-              //             color: Colors.white),
-              //       ),
-              //     ),
-              //     offset: Offset(0, 20),
-              //     onSelected: (AdmobBannerSize newSize) {
-              //       setState(() {
-              //         bannerSize = newSize;
-              //       });
-              //     },
-              //     itemBuilder:
-              //     (BuildContext context) => <PopupMenuEntry<AdmobBannerSize>>[
-              //       PopupMenuItem(
-              //         value: AdmobBannerSize.LARGE_BANNER,
-              //         child: Text('LARGE_BANNER'),
-              //       ),
-              //     ]
-              // )),
-              // Container(
-              //   child: AdmobBanner(
-              //     adUnitId: getBannerAdUnitId(),
-              //     adSize: bannerSize,
-              //     listener: (AdmobAdEvent event,
-              //         Map<String, dynamic> args) {
-              //       handleEvent(event, args, 'LARGE_BANNER');
-              //     },
-              //     onBannerCreated:
-              //         (AdmobBannerController controller) {
-              //       // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
-              //       // Normally you don't need to worry about disposing this yourself, it's handled.
-              //       // If you need direct access to dispose, this is your guy!
-              //       // controller.dispose();
-              //     },
-              //   ),
-              // ),
+              Container(
+                alignment: Alignment(0.5, 1),
+                child: FacebookBannerAd(
+                  placementId: Platform.isAndroid ? "798937887349297_803073353602417" : "798937887349297_798951814014571",
+                  bannerSize: BannerSize.STANDARD,
+                  listener: (result, value) {
+                    switch (result) {
+                      case BannerAdResult.ERROR:
+                        print("Error: $value");
+                        break;
+                      case BannerAdResult.LOADED:
+                        print("Loaded: $value");
+                        break;
+                      case BannerAdResult.CLICKED:
+                        print("Clicked: $value");
+                        break;
+                      case BannerAdResult.LOGGING_IMPRESSION:
+                        print("Logging Impression: $value");
+                        break;
+                    }
+                  },
+                ),
+              ),
+
               // //TODO: Banner add End here
 
               SizedBox(
@@ -320,48 +324,29 @@ class _HomeState extends State<Home> {
               ),
               //TODO: Banner add start here
               Container(
-                //  height: 150,
-                  child: PopupMenuButton(
-                      initialValue: bannerSize,
-                      child: Center(
-                        child: Text(
-                          'Banner size',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white),
-                        ),
-                      ),
-                      offset: Offset(0, 20),
-                      onSelected: (AdmobBannerSize newSize) {
-                        setState(() {
-                          bannerSize = newSize;
-                        });
-                      },
-                      itemBuilder:
-                          (BuildContext context) => <PopupMenuEntry<AdmobBannerSize>>[
-                        PopupMenuItem(
-                          value: AdmobBannerSize.LARGE_BANNER,
-                          child: Text('LARGE_BANNER'),
-                        ),
-                      ]
-                  )),
-              Container(
-                child: AdmobBanner(
-                  adUnitId: getBannerAdUnitId(),
-                  adSize: bannerSize,
-                  listener: (AdmobAdEvent event,
-                      Map<String, dynamic> args) {
-                    handleEvent(event, args, 'LARGE_BANNER');
-                  },
-                  onBannerCreated:
-                      (AdmobBannerController controller) {
-                    // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
-                    // Normally you don't need to worry about disposing this yourself, it's handled.
-                    // If you need direct access to dispose, this is your guy!
-                    // controller.dispose();
+                alignment: Alignment(0.5, 1),
+                child: FacebookBannerAd(
+                  placementId: Platform.isAndroid ? "798937887349297_803073353602417" : "798937887349297_798951814014571",
+                  bannerSize: BannerSize.STANDARD,
+                  listener: (result, value) {
+                    switch (result) {
+                      case BannerAdResult.ERROR:
+                        print("Error: $value");
+                        break;
+                      case BannerAdResult.LOADED:
+                        print("Loaded: $value");
+                        break;
+                      case BannerAdResult.CLICKED:
+                        print("Clicked: $value");
+                        break;
+                      case BannerAdResult.LOGGING_IMPRESSION:
+                        print("Logging Impression: $value");
+                        break;
+                    }
                   },
                 ),
               ),
+
               //TODO: Banner add End here
               WallpaperList(newwallpapers, context),
               Row(
@@ -407,48 +392,29 @@ class _HomeState extends State<Home> {
               ),
               //TODO: Banner add start here
               Container(
-                //  height: 150,
-                  child: PopupMenuButton(
-                      initialValue: bannerSize,
-                      child: Center(
-                        child: Text(
-                          'Banner size',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white),
-                        ),
-                      ),
-                      offset: Offset(0, 20),
-                      onSelected: (AdmobBannerSize newSize) {
-                        setState(() {
-                          bannerSize = newSize;
-                        });
-                      },
-                      itemBuilder:
-                          (BuildContext context) => <PopupMenuEntry<AdmobBannerSize>>[
-                            PopupMenuItem(
-                              value: AdmobBannerSize.MEDIUM_RECTANGLE,
-                              child: Text('MEDIUM_RECTANGLE'),
-                            ),
-                      ]
-                  )),
-              Container(
-                child: AdmobBanner(
-                  adUnitId: getBannerAdUnitId(),
-                  adSize: bannerSize,
-                  listener: (AdmobAdEvent event,
-                      Map<String, dynamic> args) {
-                    handleEvent(event, args, 'MEDIUM_RECTANGLE');
-                  },
-                  onBannerCreated:
-                      (AdmobBannerController controller) {
-                    // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
-                    // Normally you don't need to worry about disposing this yourself, it's handled.
-                    // If you need direct access to dispose, this is your guy!
-                    // controller.dispose();
+                alignment: Alignment(0.5, 1),
+                child: FacebookBannerAd(
+                  placementId: Platform.isAndroid ? "798937887349297_803073353602417" : "798937887349297_798951814014571",
+                  bannerSize: BannerSize.STANDARD,
+                  listener: (result, value) {
+                    switch (result) {
+                      case BannerAdResult.ERROR:
+                        print("Error: $value");
+                        break;
+                      case BannerAdResult.LOADED:
+                        print("Loaded: $value");
+                        break;
+                      case BannerAdResult.CLICKED:
+                        print("Clicked: $value");
+                        break;
+                      case BannerAdResult.LOGGING_IMPRESSION:
+                        print("Logging Impression: $value");
+                        break;
+                    }
                   },
                 ),
               ),
+
               //TODO: Banner add End here
               WallpaperList(kwallpapers, context),
               Row(
@@ -493,49 +459,31 @@ class _HomeState extends State<Home> {
                 height: 16,
               ),
               //TODO: Banner add start here
+
               Container(
-                //  height: 150,
-                  child: PopupMenuButton(
-                      initialValue: bannerSize,
-                      child: Center(
-                        child: Text(
-                          'Banner size',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white),
-                        ),
-                      ),
-                      offset: Offset(0, 20),
-                      onSelected: (AdmobBannerSize newSize) {
-                        setState(() {
-                          bannerSize = newSize;
-                        });
-                      },
-                      itemBuilder:
-                          (BuildContext context) => <PopupMenuEntry<AdmobBannerSize>>[
-                        PopupMenuItem(
-                          value: AdmobBannerSize.LARGE_BANNER,
-                          child: Text('LARGE_BANNER'),
-                        ),
-                      ]
-                  )),
-              Container(
-                child: AdmobBanner(
-                  adUnitId: getBannerAdUnitId(),
-                  adSize: bannerSize,
-                  listener: (AdmobAdEvent event,
-                      Map<String, dynamic> args) {
-                    handleEvent(event, args, 'LARGE_BANNER');
-                  },
-                  onBannerCreated:
-                      (AdmobBannerController controller) {
-                    // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
-                    // Normally you don't need to worry about disposing this yourself, it's handled.
-                    // If you need direct access to dispose, this is your guy!
-                    // controller.dispose();
+                alignment: Alignment(0.5, 1),
+                child: FacebookBannerAd(
+                  placementId: Platform.isAndroid ? "798937887349297_803073353602417" : "798937887349297_798951814014571",
+                  bannerSize: BannerSize.STANDARD,
+                  listener: (result, value) {
+                    switch (result) {
+                      case BannerAdResult.ERROR:
+                        print("Error: $value");
+                        break;
+                      case BannerAdResult.LOADED:
+                        print("Loaded: $value");
+                        break;
+                      case BannerAdResult.CLICKED:
+                        print("Clicked: $value");
+                        break;
+                      case BannerAdResult.LOGGING_IMPRESSION:
+                        print("Logging Impression: $value");
+                        break;
+                    }
                   },
                 ),
               ),
+
               //TODO: Banner add End here
               WallpaperList(popularwallpapers, context),
               Row(
@@ -581,48 +529,29 @@ class _HomeState extends State<Home> {
               ),
               //TODO: Banner add start here
               Container(
-                //  height: 150,
-                  child: PopupMenuButton(
-                      initialValue: bannerSize,
-                      child: Center(
-                        child: Text(
-                          'Banner size',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white),
-                        ),
-                      ),
-                      offset: Offset(0, 20),
-                      onSelected: (AdmobBannerSize newSize) {
-                        setState(() {
-                          bannerSize = newSize;
-                        });
-                      },
-                      itemBuilder:
-                          (BuildContext context) => <PopupMenuEntry<AdmobBannerSize>>[
-                        PopupMenuItem(
-                          value: AdmobBannerSize.LARGE_BANNER,
-                          child: Text('LARGE_BANNER'),
-                        ),
-                      ]
-                  )),
-              Container(
-                child: AdmobBanner(
-                  adUnitId: getBannerAdUnitId(),
-                  adSize: bannerSize,
-                  listener: (AdmobAdEvent event,
-                      Map<String, dynamic> args) {
-                    handleEvent(event, args, 'LARGE_BANNER');
-                  },
-                  onBannerCreated:
-                      (AdmobBannerController controller) {
-                    // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
-                    // Normally you don't need to worry about disposing this yourself, it's handled.
-                    // If you need direct access to dispose, this is your guy!
-                    // controller.dispose();
+                alignment: Alignment(0.5, 1),
+                child: FacebookBannerAd(
+                  placementId: Platform.isAndroid ? "798937887349297_803073353602417" : "798937887349297_798951814014571",
+                  bannerSize: BannerSize.STANDARD,
+                  listener: (result, value) {
+                    switch (result) {
+                      case BannerAdResult.ERROR:
+                        print("Error: $value");
+                        break;
+                      case BannerAdResult.LOADED:
+                        print("Loaded: $value");
+                        break;
+                      case BannerAdResult.CLICKED:
+                        print("Clicked: $value");
+                        break;
+                      case BannerAdResult.LOGGING_IMPRESSION:
+                        print("Logging Impression: $value");
+                        break;
+                    }
                   },
                 ),
               ),
+
               //TODO: Banner add End here
               WallpaperList(letestwallpapers, context),
               SizedBox(
@@ -703,13 +632,4 @@ CategoriesTile({@required this.imgUrl,@required this.title});
       ),
     );
   }
-}
-
-String getBannerAdUnitId() {
-  if (Platform.isIOS) {
-    return 'ca-app-pub-7270315510450456/1230276913';
-  } else if (Platform.isAndroid) {
-    return 'ca-app-pub-3940256099942544/6300978111';
-  }
-  return null;
 }

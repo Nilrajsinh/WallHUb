@@ -4,6 +4,7 @@ import 'package:wallhub/Model/Category_model.dart';
 import 'package:wallhub/Views/CATELIST.dart';
 import 'package:wallhub/dataa/data.dart';
 import 'package:wallhub/widget/widget.dart';
+import 'package:facebook_audience_network/facebook_audience_network.dart';
 
 class Category extends StatefulWidget {
   @override
@@ -38,7 +39,10 @@ class _CategoryState extends State<Category> {
               // ignore: missing_return
               children: List.generate(categories.length, (index) {
                 return CategoriesTile(
+
                     imgUrl: categories[index].imgUrl, title: categories[index].categorieName);
+
+
               }),
             ),
           ),

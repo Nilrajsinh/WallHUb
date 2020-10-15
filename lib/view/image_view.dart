@@ -5,7 +5,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:admob_flutter/admob_flutter.dart';
+import 'package:facebook_audience_network/facebook_audience_network.dart';
 
 
 class ImageView extends StatefulWidget {
@@ -17,7 +17,8 @@ class ImageView extends StatefulWidget {
 }
 
 class _ImageViewState extends State<ImageView> {
-  AdmobInterstitial interstitialAd;
+
+  bool _isInterstitialAdLoaded = false;
 
 
   @override
@@ -25,23 +26,55 @@ class _ImageViewState extends State<ImageView> {
     // TODO: implement initState
     super.initState();
 
+    _loadInterstitialAd();
 
 
+  }
 
-    interstitialAd = AdmobInterstitial(
-      adUnitId: getInterstitialAdUnitId(),
-      listener: (AdmobAdEvent event, Map<String, dynamic> args) {
-        if (event == AdmobAdEvent.closed) interstitialAd.load();
-        handleEvent(event, args, 'Interstitial');
+  void _loadInterstitialAd() {
+    FacebookInterstitialAd.loadInterstitialAd(
+      placementId:
+      "798937887349297_803056233604129", //"IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617" YOUR_PLACEMENT_ID
+      listener: (result, value) {
+        print(">> FAN > Interstitial Ad: $result --> $value");
+        if (result == InterstitialAdResult.LOADED)
+          _isInterstitialAdLoaded = true;
+
+        /// Once an Interstitial Ad has been dismissed and becomes invalidated,
+        /// load a fresh Ad by calling this function.
+        if (result == InterstitialAdResult.DISMISSED &&
+            value["invalidated"] == true) {
+          _isInterstitialAdLoaded = false;
+          _loadInterstitialAd();
+        }
       },
     );
-    interstitialAd.load();
-
+  }
+  _showInterstitialAd() {
+    if (_isInterstitialAdLoaded == true)
+      FacebookInterstitialAd.showInterstitialAd();
+    else
+      print("Interstial Ad not yet loaded!");
   }
 
-  void handleEvent( AdmobAdEvent event, Map<String, dynamic> args, String adType){
+  Widget _currentAd = SizedBox(
+    width: 0.0,
+    height: 0.0,
+  );
 
+  _showBannerAd() {
+    setState(() {
+      _currentAd = FacebookBannerAd(
+        placementId:
+            "798937887349297_803073353602417", //testid
+        bannerSize: BannerSize.STANDARD,
+        listener: (result, value) {
+          print("Banner Ad: $result -->  $value");
+        },
+      );
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,11 +97,15 @@ class _ImageViewState extends State<ImageView> {
               children: <Widget>[
                 GestureDetector(
                   onTap: () {
-                    _save();
-                    if (interstitialAd.isLoaded != null) {
-                      interstitialAd.show();
-                    }
-                    Navigator.pop(context);
+                   _save();
+                    FacebookInterstitialAd.loadInterstitialAd(
+                      placementId: Platform.isAndroid ? "798937887349297_803056233604129" : "798937887349297_798951814014571",
+                      listener: (result, value) {
+                        if (result == InterstitialAdResult.LOADED)
+                          FacebookInterstitialAd.showInterstitialAd();
+                      },
+                    );
+                   Navigator.pop(context);
                   },
                   child: Stack(
                     children: <Widget>[
@@ -100,7 +137,7 @@ class _ImageViewState extends State<ImageView> {
                         child:Column(
                           children: <Widget>[
                             Text('Set Wallpaper',style: TextStyle(fontSize: 16,color: Colors.white70)),
-                            Text('Image will be stored in gallery',style: TextStyle(fontSize: 12,color: Colors.white70),)
+                            Text('Image will be stored in gallery',style: TextStyle(fontSize: 10,color: Colors.white70),)
                           ],
                         ),
                       ),
@@ -115,7 +152,11 @@ class _ImageViewState extends State<ImageView> {
                     Navigator.pop(context);
                   },
                     child: Text("Cancel",style: TextStyle(color: Colors.white),)),
-                SizedBox(height: 70,)
+                SizedBox(height: 70,),
+                Container(
+                  alignment: Alignment(0.5, 1),
+                  child: _showBannerAd()
+                )
               ],
             ),
           )
@@ -150,13 +191,6 @@ class _ImageViewState extends State<ImageView> {
 
 }
 
-String getInterstitialAdUnitId() {
-  if (Platform.isIOS) {
-    return 'ca-app-pub-7270315510450456/9519830472';
-  } else if (Platform.isAndroid) {
-    return 'ca-app-pub-3940256099942544/1033173712';
-  }
-  return null;
-}
+
 
 

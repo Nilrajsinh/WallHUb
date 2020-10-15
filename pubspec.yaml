@@ -35,7 +35,9 @@ dependencies:
   permission_handler: ^4.2.0+hotfix.3
   random_string: ^2.0.1
   dio: ^3.0.9
-  admob_flutter: ^1.0.0
+  facebook_audience_network: ^0.7.1
+
+
 
 dev_dependencies:
   flutter_test:

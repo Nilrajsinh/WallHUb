@@ -5,19 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:wallhub/Views/Categories.dart';
 import 'package:wallhub/Views/home.dart';
 import 'package:wallhub/widget/widget.dart';
-import 'package:admob_flutter/admob_flutter.dart';
+
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize without device test ids.
-  Admob.initialize();
-  if (Platform.isIOS){
-    await Admob.requestTrackingAuthorization();
-  }
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+
+
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
