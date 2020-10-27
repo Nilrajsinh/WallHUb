@@ -36,7 +36,7 @@ dependencies:
   random_string: ^2.0.1
   dio: ^3.0.9
   facebook_audience_network: ^0.7.1
-
+  fluttertoast: ^7.1.1
 
 
 dev_dependencies:
