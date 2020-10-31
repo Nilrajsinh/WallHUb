@@ -37,6 +37,10 @@ dependencies:
   dio: ^3.0.9
   facebook_audience_network: ^0.7.1
   fluttertoast: ^7.1.1
+  wallpaper: ^1.0.6
+  image_picker_saver: ^0.3.0
+
+
 
 
 dev_dependencies:

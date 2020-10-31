@@ -5,8 +5,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker_saver/image_picker_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:facebook_audience_network/facebook_audience_network.dart';
+import 'package:http/http.dart' as http;
 
 
 
@@ -30,15 +32,33 @@ class _ImageViewState extends State<ImageView> {
 
     _loadInterstitialAd();
 
+
+
+  }
+
+  void _onImageSaveButtonPressed() async {
+    print("_onImageSaveButtonPressed");
+    var response = await http.get(widget.imgUrl);
+
+
+    debugPrint(response.statusCode.toString());
+
+    var filePath = await ImagePickerSaver.saveFile(
+        fileData: response.bodyBytes);
+
     Fluttertoast.showToast(
-        msg: "Take ScreenShot to save",
+        msg: "Image Saved",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 2
     );
+    Navigator.pop(context);
 
+    var savedFile= File.fromUri(Uri.file(filePath));
+    // setState(() {
+    //   _imageFile = Future<File>.sync(() => savedFile);
+    // });
   }
-
 
   void _loadInterstitialAd() {
     FacebookInterstitialAd.loadInterstitialAd(
@@ -100,74 +120,76 @@ class _ImageViewState extends State<ImageView> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             alignment: Alignment.bottomCenter,
-            // child: Column(
-            //   mainAxisAlignment: MainAxisAlignment.end,
-            //
-            //   children: <Widget>[
-            //     GestureDetector(
-            //       onTap: () {
-            //        _save();
-            //         FacebookInterstitialAd.loadInterstitialAd(
-            //           placementId: Platform.isAndroid ? "798937887349297_803056233604129" : "798937887349297_798951814014571",
-            //           listener: (result, value) {
-            //             if (result == InterstitialAdResult.LOADED)
-            //               FacebookInterstitialAd.showInterstitialAd();
-            //           },
-            //         );
-            //        Navigator.pop(context);
-            //       },
-            //       child: Stack(
-            //         children: <Widget>[
-            //           Container(
-            //             height: 50,
-            //             decoration: BoxDecoration(
-            //               color: Color(0Xff1C1B1B).withOpacity(0.8),
-            //               borderRadius: BorderRadius.circular(30),
-            //
-            //             ),
-            //             width: MediaQuery.of(context).size.width/2,
-            //
-            //
-            //           ),
-            //           Container(
-            //             width: MediaQuery.of(context).size.width/2,
-            //             height: 50,
-            //             padding: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-            //             decoration: BoxDecoration(
-            //                 borderRadius: BorderRadius.circular(30),
-            //                 border: Border.all(color: Colors.white54, width: 1),
-            //                 gradient: LinearGradient(
-            //                     colors: [
-            //                       Color(0X36FFFFFF),
-            //                       Color(0X0FFFFFFF)
-            //                     ]
-            //                 )
-            //             ),
-            //             child:Column(
-            //               children: <Widget>[
-            //                 Text('Set Wallpaper',style: TextStyle(fontSize: 16,color: Colors.white70)),
-            //                 Text('Image will be stored in gallery',style: TextStyle(fontSize: 10,color: Colors.white70),)
-            //               ],
-            //             ),
-            //           ),
-            //
-            //         ],
-            //       ),
-            //
-            //     ),
-            //     SizedBox(height: 16,),
-            //     GestureDetector(
-            //       onTap: (){
-            //         Navigator.pop(context);
-            //       },
-            //         child: Text("Cancel",style: TextStyle(color: Colors.white),)),
-            //     SizedBox(height: 70,),
-            //     Container(
-            //       alignment: Alignment(0.5, 1),
-            //       child: _showBannerAd()
-            //     )
-            //   ],
-            // ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () async{
+                   //
+                    if (Platform.isAndroid){
+                      _onImageSaveButtonPressed();
+                    }
+                    else{
+                      _save();
+                    }
+
+
+
+                   // Navigator.pop(context);
+                  },
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Color(0Xff1C1B1B).withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(30),
+
+                        ),
+                        width: MediaQuery.of(context).size.width/2,
+
+
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width/2,
+                        height: 50,
+                        padding: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            border: Border.all(color: Colors.white54, width: 1),
+                            gradient: LinearGradient(
+                                colors: [
+                                  Color(0X36FFFFFF),
+                                  Color(0X0FFFFFFF)
+                                ]
+                            )
+                        ),
+                        child:Column(
+                          children: <Widget>[
+                            Text('Set Wallpaper',style: TextStyle(fontSize: 16,color: Colors.white70)),
+                            Text('Image will be stored in gallery',style: TextStyle(fontSize: 10,color: Colors.white70),)
+                          ],
+                        ),
+                      ),
+
+                    ],
+                  ),
+
+                ),
+                SizedBox(height: 16,),
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pop(context);
+                  },
+                    child: Text("Cancel",style: TextStyle(color: Colors.white),)),
+                SizedBox(height: 70,),
+                Container(
+                  alignment: Alignment(0.5, 1),
+                  child: _showBannerAd()
+                )
+              ],
+            ),
           )
         ],
       ),
