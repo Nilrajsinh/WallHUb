@@ -62,8 +62,7 @@ class _ImageViewState extends State<ImageView> {
 
   void _loadInterstitialAd() {
     FacebookInterstitialAd.loadInterstitialAd(
-      placementId:
-      "798937887349297_803056233604129", //"IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617" YOUR_PLACEMENT_ID
+      placementId: Platform.isAndroid ? "798937887349297_803056233604129" : "798937887349297_817471155495970", //"IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617" YOUR_PLACEMENT_ID
       listener: (result, value) {
         print(">> FAN > Interstitial Ad: $result --> $value");
         if (result == InterstitialAdResult.LOADED)
@@ -126,7 +125,7 @@ class _ImageViewState extends State<ImageView> {
               children: <Widget>[
                 GestureDetector(
                   onTap: () async{
-                   //
+
                     if (Platform.isAndroid){
                       _onImageSaveButtonPressed();
                     }
@@ -134,7 +133,13 @@ class _ImageViewState extends State<ImageView> {
                       _save();
                     }
 
-
+                    FacebookInterstitialAd.loadInterstitialAd(
+                      placementId: "798937887349297_803056233604129",
+                      listener: (result, value) {
+                        if (result == InterstitialAdResult.LOADED)
+                          FacebookInterstitialAd.showInterstitialAd(delay: 5000);
+                      },
+                    );
 
                    // Navigator.pop(context);
                   },

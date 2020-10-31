@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:flutter/material.dart';
 import 'package:wallhub/Views/Categories.dart';
 import 'package:wallhub/Views/home.dart';
@@ -12,6 +13,9 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize without device test ids.
 
+  FacebookAudienceNetwork.init(
+
+  );
   runApp(MyApp());
 }
 
